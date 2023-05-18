@@ -53,16 +53,88 @@ def parse_ktp(lines):
     identity = Identity()
     lines = lines.replace("\n\n\n\n\n", "\n").replace("\n\n\n\n", "\n").replace("\n\n\n", "\n").replace("\n\n", "\n")
     print(lines)
-   
-    if 'KelOesa' in lines or 'Kel/Desa' in lines or 'Kel/Oesa' in lines or 'KelDesa' in lines:
-        if 'KelOesa' in lines:
-            kelurahan_start = lines.index('KelOesa') + 7
-        elif 'Kel/Desa' in lines:
-            kelurahan_start = lines.index('Kel/Desa') + 8
-        elif 'Kel/Oesa' in lines:
-            kelurahan_start = lines.index('Kel') + 3
-        elif 'KelDesa' in lines:
-            kelurahan_start = lines.index('KelDesa') + 7
+    
+
+    lines = lines.upper() #MENGURASI CASE SENSITIF
+
+    #alamat
+    if 'ALAMAT' in lines or 'AIAMAT' in lines or 'AAMAT' in lines or 'ALAMIT' in lines:
+        if 'ALAMAT' in lines:
+            alamat_start = lines.index('ALAMAT') + 9
+        elif 'AIAMAT' in lines:
+            alamat_start = lines.index('AIAMAT') + 6
+        elif 'AAMAT' in lines:
+            alamat_start = lines.index('AAMAT') + 5
+        elif 'ALAMIT' in lines:
+            alamat_start = lines.index('ALAMIT') + 6
+    
+        alamat_end = lines.find('\n', alamat_start)
+        alamat = lines[alamat_start:alamat_end].strip()
+        alamat_lines = alamat  # Store the value in a separate variable
+
+        alamat_file = open("model/alamat.txt", 'r')
+        alamat_data = alamat_file.read()
+        alamat_file.close()
+
+        words = alamat_data.split('\n')
+        closest_match = process.extractOne(alamat_lines, words)  # Use alamat_lines
+        closest_word = closest_match[0]
+        match_score = closest_match[1]
+        threshold = 60  # Nilai ambang batas untuk kesesuaian
+        if match_score >= threshold:
+            identity.alamat = closest_word
+            print(identity.alamat)
+        else:
+            identity.alamat = ""
+
+    # kecamatan
+    if 'KECAMATAN' in lines or '<ECAMATAN' in lines or '~ECAMATAN' in lines:
+        if 'KECAMATAN' in lines:
+            kecamatan_start = lines.index('KECAMATAN') + 9
+        elif '<ECAMATAN' in lines:
+            kecamatan_start = lines.index('<ECAMATAN') + 9
+        elif '~ECAMATAN' in lines:
+            kecamatan_start = lines.index('~ECAMATAN') + 9
+        
+    
+        kecamatan_end = lines.find('\n', kecamatan_start)
+        kecamatan = lines[kecamatan_start:kecamatan_end].strip()
+        kecamatan_lines = kecamatan  # Store the value in a separate variable
+
+        kecamatan_file = open("model/list-kecamatan.txt", 'r')
+        kecamatan_data = kecamatan_file.read()
+        kecamatan_file.close()
+
+        words = kecamatan_data.split('\n')
+        closest_match = process.extractOne(kecamatan_lines, words)  # Use kecamatan_lines
+        closest_word = closest_match[0]
+        match_score = closest_match[1]
+        threshold = 60  # Nilai ambang batas untuk kesesuaian
+        if match_score >= threshold:
+            identity.kecamatan = closest_word
+            print(identity.kecamatan)
+        else:
+            identity.kecamatan = ""
+    
+ 
+    # KELURAHAN
+    if 'KELOESA' in lines or 'KEL/DESA' in lines or 'KEL/OESA' in lines or 'KELDESA' in lines or 'KEIDESA' in lines or 'XEIDESA' in lines or '~OTDESA' in lines:
+        if 'KELOESA' in lines:
+            kelurahan_start = lines.index('KELOESA') + 7
+        elif 'KEL/DESA' in lines:
+            kelurahan_start = lines.index('KEL/DESA') + 8
+        elif 'KEL/OESA' in lines:
+            kelurahan_start = lines.index('KEL/OESA') + 3
+        elif 'KELDESA' in lines:
+            kelurahan_start = lines.index('KELDESA') + 7
+        elif 'KEIDESA' in lines:
+            kelurahan_start = lines.index('KEIDESA') + 7
+        elif 'XEIDESA' in lines:
+            kelurahan_start = lines.index('XEIDESA') + 7
+        elif '~OTDESA' in lines:
+            kelurahan_start = lines.index('~OTDESA') + 7
+            
+        
     
         kelurahan_end = lines.find('\n', kelurahan_start)
         kelurahan = lines[kelurahan_start:kelurahan_end].strip()
@@ -82,33 +154,36 @@ def parse_ktp(lines):
         else:
             identity.kelurahan = ""
     
-    if 'RTRW' in lines or 'RTW' in lines or 'RT/RW' in lines or 'RW' in lines:
+    # RT & RW
+    if 'RTRW' in lines or 'RTW' in lines or 'RT/RW' in lines or 'RW' in lines or 'HIRW' in lines:
         if 'RTRW' in lines:
             rtrw_start = lines.index('RTRW') + 4
         elif 'RTW' in lines:
             rtrw_start = lines.index('RTW') + 3
         elif 'RT/RW' in lines:
-            rtrw_start = lines.index('Kel') + 5
+            rtrw_start = lines.index('RT/RW') + 5
         elif 'RW' in lines:
             rtrw_start = lines.index('RW') + 2
+        elif 'HIRW' in lines:
+            rtrw_start = lines.index('HIRW') + 2
         
         rtrw_end = lines.find('\n', rtrw_start)
         rtrw = lines[rtrw_start:rtrw_end].strip()
         lines = rtrw   
-        provinsis_file = open("model/rtrw.txt", 'r')
-        provinsis_data = provinsis_file.read()
-        provinsis_file.close()
+        rtrw_file = open("model/rtrw.txt", 'r')
+        rtrw_data = rtrw_file.read()
+        rtrw_file.close()
 
-        words = provinsis_data.split('\n')
+        words = rtrw_data.split('\n')
         closest_match = process.extractOne(lines, words)
         closest_word = closest_match[0]
         match_score = closest_match[1]
-        threshold = 80  # Nilai ambang batas untuk kesesuaian
+        threshold = 60  # Nilai ambang batas untuk kesesuaian
         if match_score >= threshold:
-            identity.provinsi = closest_word
-            print(identity.provinsi)
+            identity.rtrw = closest_word
+            print(identity.rtrw)
         else:
-            identity.provinsi = ""
+            identity.rtrw = ""
 
 
 def async_wrap(func):
