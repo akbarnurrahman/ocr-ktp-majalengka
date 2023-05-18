@@ -1,0 +1,8 @@
+title_dict = {
+    "ewarganegaraan": "Kewarganegaraan",
+    "“ISLAM": "ISLAM",
+    "PEREMPLIAN": "PEREMPUAN",
+    "JATIM": "Jawa Timur",
+    "SUMSEL": "Sumatera Selatan",
+    # Tambahkan kata kunci dan nilainya sesuai kebutuhan
+}
