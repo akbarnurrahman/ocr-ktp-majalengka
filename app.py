@@ -84,6 +84,7 @@ def parse_ktp(lines):
         nama_data = nama_file.read()
         nama_file.close()
 
+        print(len(nama_split))
         if len(nama_split) == 1:
             threshold = 91  # Nilai ambang batas untuk kesesuaian
             kata1 = nama_split[0]
@@ -109,7 +110,8 @@ def parse_ktp(lines):
 
             # Cetak hasil penggabungan
             print(nama)
-        elif len(nama_split) > 1:
+        elif len(nama_split) == 2 :
+            print("masuk kedua")
             threshold = 91  # Nilai ambang batas untuk kesesuaian
             kata1 = nama_split[0]
             kata2 = nama_split[1]
@@ -134,7 +136,6 @@ def parse_ktp(lines):
                 nama_file.close()
 
             if kata2_match_score >= threshold:
-                print("masuk")
                 kata2 = kata2_closest_word
             else:
                 kata2 = nama_split[1]
@@ -147,7 +148,8 @@ def parse_ktp(lines):
 
             # Cetak hasil penggabungan
             print(nama)
-        elif len(nama_split) > 2:
+        elif len(nama_split) == 3:
+            print('masuk kesini')
             threshold = 91  # Nilai ambang batas untuk kesesuaian
             kata1 = nama_split[0]
             kata2 = nama_split[1]
@@ -177,7 +179,7 @@ def parse_ktp(lines):
                 nama_file.close()
 
             if kata2_match_score >= threshold:
-                print("masuk")
+                
                 kata2 = kata2_closest_word
             else:
                 kata2 = nama_split[1]
@@ -198,7 +200,8 @@ def parse_ktp(lines):
 
             # Cetak hasil penggabungan
             print(nama)
-        elif len(nama_split) > 3:
+        elif len(nama_split) == 4:
+            print("masuk ketiga")
             threshold = 91  # Nilai ambang batas untuk kesesuaian
             kata1 = nama_split[0]
             kata2 = nama_split[1]
@@ -234,7 +237,7 @@ def parse_ktp(lines):
                 nama_file.close()
 
             if kata2_match_score >= threshold:
-                print("masuk")
+                
                 kata2 = kata2_closest_word
             else:
                 kata2 = nama_split[1]
@@ -246,6 +249,78 @@ def parse_ktp(lines):
                 kata3 = kata3_closest_word
             else:
                 kata3 = nama_split[2]
+                nama_file = open("model/nama.txt", 'a')
+                nama_file.write('\n' + kata3)
+                nama_file.close()
+
+            if kata4_match_score >= threshold:
+                kata4 = kata4_closest_word
+            else:
+                kata4 = nama_split[3]
+                nama_file = open("model/nama.txt", 'a')
+                nama_file.write('\n' + kata3)
+                nama_file.close()
+
+            # Simpan hasil penggabungan dalam variabel 'hasil'
+            nama = kata1+ " " + kata2+ " " + kata3 + " " + kata4
+
+            # Cetak hasil penggabungan
+            print(nama)
+        elif len(nama_split) == 5:
+            threshold = 91  # Nilai ambang batas untuk kesesuaian
+            kata1 = nama_split[0]
+            kata2 = nama_split[1]
+            kata3 = nama_split[2]
+            kata4 = nama_split[3]
+            kata5 = nama_split[4]
+
+            words = nama_data.split('\n')
+
+            # Perform closest match for each kata
+            kata1_match = process.extractOne(kata1, words)
+            kata1_closest_word = kata1_match[0]
+            kata1_match_score = kata1_match[1]
+
+            kata2_match = process.extractOne(kata2, words)
+            kata2_closest_word = kata2_match[0]
+            kata2_match_score = kata2_match[1]
+
+            kata3_match = process.extractOne(kata3, words)
+            kata3_closest_word = kata3_match[0]
+            kata3_match_score = kata3_match[1]
+
+            kata4_match = process.extractOne(kata4, words)
+            kata4_closest_word = kata4_match[0]
+            kata4_match_score = kata4_match[1]
+
+            kata5_match = process.extractOne(kata5, words)
+            kata5_closest_word = kata5_match[0]
+            kata5_match_score = kata5_match[1]
+
+            if kata1_match_score >= threshold:
+                kata1 = kata1_closest_word
+            else:
+                kata1 = nama_split[0]
+                nama_file = open("model/nama.txt", 'a')
+                nama_file.write('\n' + kata1)
+                nama_file.close()
+
+            if kata2_match_score >= threshold:
+                
+                kata2 = kata2_closest_word
+            else:
+                kata2 = nama_split[1]
+                nama_file = open("model/nama.txt", 'a')
+                nama_file.write('\n' + kata2)
+                nama_file.close()
+
+            if kata3_match_score >= threshold:
+                kata3 = kata3_closest_word
+            else:
+                kata3 = nama_split[2]
+                nama_file = open("model/nama.txt", 'a')
+                nama_file.write('\n' + kata3)
+                nama_file.close()
 
             if kata4_match_score >= threshold:
                 kata4 = kata4_closest_word
