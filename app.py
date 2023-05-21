@@ -57,6 +57,7 @@ def parse_ktp(lines):
 
     lines = lines.upper() #MENGURASI CASE SENSITIF
 
+    
     #alamat
     if 'ALAMAT' in lines or 'AIAMAT' in lines or 'AAMAT' in lines or 'ALAMIT' in lines:
         if 'ALAMAT' in lines:
@@ -126,6 +127,7 @@ def parse_ktp(lines):
         elif 'KEL/OESA' in lines:
             kelurahan_start = lines.index('KEL/OESA') + 3
         elif 'KELDESA' in lines:
+            print('kesini');
             kelurahan_start = lines.index('KELDESA') + 7
         elif 'KEIDESA' in lines:
             kelurahan_start = lines.index('KEIDESA') + 7
@@ -133,8 +135,8 @@ def parse_ktp(lines):
             kelurahan_start = lines.index('XEIDESA') + 7
         elif '~OTDESA' in lines:
             kelurahan_start = lines.index('~OTDESA') + 7
+
             
-        
     
         kelurahan_end = lines.find('\n', kelurahan_start)
         kelurahan = lines[kelurahan_start:kelurahan_end].strip()
@@ -147,10 +149,10 @@ def parse_ktp(lines):
         closest_match = process.extractOne(kelurahan_lines, words)  # Use kelurahan_lines
         closest_word = closest_match[0]
         match_score = closest_match[1]
+        print(closest_word)
         threshold = 80  # Nilai ambang batas untuk kesesuaian
         if match_score >= threshold:
             identity.kelurahan = closest_word
-            print(identity.kelurahan)
         else:
             identity.kelurahan = ""
     
