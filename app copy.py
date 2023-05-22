@@ -52,12 +52,12 @@ def parse_ktp(lines):
     dates = []
 
     identity = Identity()
-    print(lines)
     lines = lines.replace("\n\n\n\n\n", "\n").replace("\n\n\n\n", "\n").replace("\n\n\n", "\n").replace("\n\n", "\n")
     print(lines)
     
 
     lines = lines.upper() #MENGURASI CASE SENSITIF
+
 
     #nama
     if 'NAMA' in lines or 'N4MA' in lines or 'AMA' in lines or 'NMA' in lines or 'NAMA.' in lines:
@@ -71,7 +71,6 @@ def parse_ktp(lines):
             nama_start = lines.index('NMA') + 3
         elif 'NAMA.' in lines:
             nama_start = lines.index('NAMA.') + 6
-    
     
         nama_end = lines.find('\n', nama_start)
         nama = lines[nama_start:nama_end].strip()
@@ -338,12 +337,10 @@ def parse_ktp(lines):
             print(nama)
         else:
             nama = nama
-    else:
-        lines_list = lines.split("\n")
-        nama = lines_list[3]
-        print(nama)
 
     # PEKERJAAN
+    lines = re.sub("/|Pekerjaan|Pekerjaan |Pekerjaan:|Pekerjaan: |Pekerjaan :| Pekerjaan : |" + identity.pekerjaan, "",
+lines, flags=re.IGNORECASE)
     if 'PEKERJAAN' in lines or 'PEKENAAN' in lines or 'PEKERAAN' in lines:
         if 'PEKERJAAN' in lines:
             print('12')
@@ -380,18 +377,6 @@ def parse_ktp(lines):
         else:
             print('gak ada')
             identity.pekerjaan = ""
-    else:
-        lines_list = lines.split("\n")
-        pekerjaan = lines_list[12]
-        pekerjaan_lines = pekerjaan  
-        pekerjaan_file = open("model/pekerjaan.txt", 'r')
-        pekerjaan_data = pekerjaan_file.read()
-        pekerjaan_file.close()
-        words = pekerjaan_data.split('\n')
-        closest_match = process.extractOne(pekerjaan_lines, words)  # Use pekerjaan_lines
-        closest_word = closest_match[0]
-        match_score = closest_match[1]
-        print(closest_word)
 
     #alamat
     if 'ALAMAT' in lines or 'AIAMAT' in lines or 'AAMAT' in lines or 'ALAMIT' in lines:
@@ -431,20 +416,9 @@ def parse_ktp(lines):
             alamat_file.write('\n' + alamat)
             alamat_file.close()
             print(identity.alamat)
-    else:
-        lines_list = lines.split("\n")
-        alamat = lines_list[6]
-        alamat_lines = alamat  
-        alamat_file = open("model/alamat.txt", 'r')
-        alamat_data = alamat_file.read()
-        alamat_file.close()
-        words = alamat_data.split('\n')
-        closest_match = process.extractOne(alamat_lines, words)  # Use alamat_lines
-        closest_word = closest_match[0]
-        match_score = closest_match[1]
-        print(closest_word)
 
     # kecamatan
+    lines = re.sub("/|Kecamatan| ", lines, flags=re.IGNORECASE)
     if 'KECAMATAN' in lines or '<ECAMATAN' in lines or '~ECAMATAN' in lines:
         if 'KECAMATAN' in lines:
             kecamatan_start = lines.index('KECAMATAN') + 9
@@ -472,17 +446,6 @@ def parse_ktp(lines):
             print(identity.kecamatan)
         else:
             identity.kecamatan = ""
-    else:
-        lines_list = lines.split("\n")
-        kacamatan_lines = lines_list[9]
-        kacamatan_file = open("model/list-kecamatan.txt", 'r')
-        kacamatan_data = kacamatan_file.read()
-        kacamatan_file.close()
-        words = kacamatan_data.split('\n')
-        closest_match = process.extractOne(kacamatan_lines, words)  # Use kacamatan_lines
-        closest_word = closest_match[0]
-        match_score = closest_match[1]
-        print(closest_word)
     
  
     # KELURAHAN
@@ -521,17 +484,6 @@ def parse_ktp(lines):
             identity.kelurahan = closest_word
         else:
             identity.kelurahan = ""
-    else:
-        lines_list = lines.split("\n")
-        kelurahan_lines = lines_list[8]
-        kelurahan_file = open("model/desa.txt", 'r')
-        kelurahan_data = kelurahan_file.read()
-        kelurahan_file.close()
-        words = kelurahan_data.split('\n')
-        closest_match = process.extractOne(kelurahan_lines, words)  # Use kelurahan_lines
-        closest_word = closest_match[0]
-        match_score = closest_match[1]
-        print(closest_word)
     
     # RT & RW
     if 'RTRW' in lines or 'RTW' in lines or 'RT/RW' in lines or 'RW' in lines or 'HIRW' in lines:
@@ -563,19 +515,6 @@ def parse_ktp(lines):
             print(identity.rtrw)
         else:
             identity.rtrw = ""
-    else:
-        lines_list = lines.split("\n")
-        rtrw = lines_list[7]
-        rtrw_lines = rtrw  
-        rtrw_file = open("model/rtrw.txt", 'r')
-        rtrw_data = rtrw_file.read()
-        rtrw_file.close()
-
-        words = rtrw_data.split('\n')
-        closest_match = process.extractOne(rtrw_lines, words)  # Use rtrw_lines
-        closest_word = closest_match[0]
-        match_score = closest_match[1]
-        print(closest_word)
     
     
 
